@@ -1,5 +1,3 @@
-import {setCookie, getCookie, delCookie} from './cookie';
-
 // 日期格式化
 export function formatDate(date, fmt) {
   date = new Date(date);
@@ -28,49 +26,19 @@ function padLeftZero(str) {
 
 // 获取userId
 export function getUserId() {
-  return getCookie('userId') || '';
+  return sessionStorage['userId'] || '';
 }
 
 // 保存用户登录信息
 export function setUser(data) {
-  setCookie('userId', data.userId);
-  setCookie('token', data.token);
-  setCookie('__sig__', data.sig);
-  setCookie('__accountType__', data.accountType);
-  setCookie('__txAppCode__', data.txAppCode);
-}
-
-// 获取腾讯云登录的sig
-export function getSig () {
-  return getCookie('__sig__') || '';
-}
-
-// 获取腾讯云登录的accountType
-export function getAccountType () {
-  return getCookie('__accountType__') || '';
-}
-
-// 获取腾讯云登录的txAppCode
-export function getTxAppCode () {
-  return getCookie('__txAppCode__') || '';
-}
-
-// 获取腾讯云登录的参数
-export function getTencentParams () {
-  return {
-    sig: getSig(),
-    accountType: getAccountType(),
-    txAppCode: getTxAppCode()
-  };
+  sessionStorage['userId'] = data.userId;
+  sessionStorage['token'] = data.token;
 }
 
 // 删除用户登录信息
 export function clearUser() {
-  delCookie('userId');
-  delCookie('token');
-  delCookie('__sig__');
-  delCookie('__accountType__');
-  delCookie('__txAppCode__');
+  sessionStorage.removeItem('userId');
+  sessionStorage.removeItem('token');
 }
 
 // 是否登录
@@ -231,27 +199,6 @@ export function getImgData(fileType, img, dir, next) {
     next(canvas.toDataURL(fileType, 0.8));
   };
   image.src = img;
-}
-
-// 设置微信登录时填写的手机号和验证码
-export function setWxMobAndCapt (mobile, captcha) {
-  sessionStorage.setItem('__mob__', mobile);
-  sessionStorage.setItem('__capt__', captcha);
-}
-
-// 获取微信登录时填写的手机号和验证码
-export function getWxMobAndCapt () {
-  let mobile = sessionStorage.getItem('__mob__');
-  let captcha = sessionStorage.getItem('__capt__');
-  sessionStorage.removeItem('__mob__');
-  sessionStorage.removeItem('__capt__');
-  if (mobile && captcha) {
-    return {
-      mobile,
-      captcha
-    };
-  }
-  return null;
 }
 
 // 校验短信验证码

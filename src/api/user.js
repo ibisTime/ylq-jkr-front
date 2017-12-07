@@ -2,6 +2,7 @@ import fetch from 'common/js/fetch';
 import {getUserId} from 'common/js/util';
 import {setCookie} from 'common/js/cookie';
 
+export function login() {}
 /**
  * 微信登录
  * @param {string} code

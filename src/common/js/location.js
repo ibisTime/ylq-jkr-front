@@ -7,7 +7,7 @@ export function getLocation() {
     let map = new AMap.Map('', {
       resizeEnable: true
     });
-    map.plugin('AMap.Geolocation', function() {
+    map.plugin('AMap.Geolocation', () => {
       let geolocation = new AMap.Geolocation({
         enableHighAccuracy: true, // 是否使用高精度定位，默认:true
         timeout: 5e3 // 超过5秒后停止定位，默认：无穷大
@@ -29,7 +29,8 @@ export function getLocation() {
             province,
             city,
             area,
-            township
+            township,
+            address: province + city + area + township + addressComponent.street + addressComponent.streetNumber
           }
         };
         resolve(result);

@@ -27,8 +27,7 @@
       },
       token: {
         type: String,
-        default: '',
-        required: true
+        default: ''
       },
       multiple: {
         type: Boolean,
@@ -79,7 +78,6 @@
           if (maxSizeLimit && file.size > maxSizeLimit) {
             console.trace && console.trace(new Error('文件大小错误!'));
             this.$emit('error', {
-              coed: 1,
               message: '上传的文件大小超出了限制:' + this.props.maxSize
             });
           } else {
@@ -97,7 +95,6 @@
             });
           }
         }
-        this.$emit('drop', files, e);
       },
       upload(file) {
         let r = request

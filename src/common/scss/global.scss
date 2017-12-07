@@ -2,8 +2,6 @@
 @import "mixin.scss";
 
 .form-wrapper {
-  padding-top: 0.2rem;
-
   .form-item {
     position: relative;
     display: -webkit-box;
@@ -88,9 +86,16 @@
       }
     }
     .item-btn {
-      padding-left: 0.2rem;
+      padding-left: 0.3rem;
       width: 2.1rem;
       padding-right: 0.3rem;
+      @include border-left-1px($color-border);
+
+      &::after {
+        height: 1em;
+        bottom: 50%;
+        transform: translate(0, 50%);
+      }
 
       button {
         width: 100%;
@@ -98,12 +103,12 @@
         line-height: 0.6rem;
         white-space: nowrap;
         border-radius: 0.1rem;
-        font-size: $font-size-small;
-        background: $color-cancel-background;
-        color: #fff;
+        font-size: $font-size-medium-s;
+        background: transparent;
+        color: $primary-color;
 
         &[disabled] {
-          background: $color-disable-background;
+          color: $color-disable-background;
         }
       }
     }
@@ -123,7 +128,7 @@
       width: 100%;
       line-height: 0.9rem;
       border-radius: 0.1rem;
-      font-size: $font-size-medium-xx;
+      font-size: $font-size-large-s;
       background: $primary-color;
       color: #fff;
 
@@ -224,6 +229,12 @@
   }
 }
 
+.over-hide {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .twoline-ellipsis {
   display: -webkit-box;
   overflow: hidden;
@@ -232,4 +243,61 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   word-break: break-all;
+}
+
+.cd-flexbox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.cd-flex1 {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.cd-align-center {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.full-screen-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cd-avatar-box {
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.cd-h100 {
+  height: 100%;
+}
+
+.cd-w100 {
+  width: 100%;
+}
+
+.cd-bg-fff {
+  background-color: #fff;
+}
+
+.btn-primary {
+  width: 100%;
+  line-height: 0.9rem;
+  border-radius: 0.1rem;
+  font-size: $font-size-large-s;
+  color: #fff;
+  background: $primary-color;
 }
