@@ -9,13 +9,10 @@
         </div>
       </div>
       <div class="form-item">
-        <div class="item-label">验证码</div>
+        <div class="item-label">密码</div>
         <div class="item-input-wrapper">
-          <input type="tel" class="item-input" name="captcha" v-model="captcha" v-validate="'required|captcha'" placeholder="请输入验证码">
-          <span v-show="errors.has('captcha')" class="error-tip">{{errors.first('captcha')}}</span>
-        </div>
-        <div class="item-btn border-left-1px">
-          <button :disabled="sending" @click="sendCaptcha">{{captBtnText}}</button>
+          <input type="tel" class="item-input" name="pwd" v-model="pwd" v-validate="'required'" placeholder="请输入密码">
+          <span v-show="errors.has('pwd')" class="error-tip">{{errors.first('pwd')}}</span>
         </div>
       </div>
       <div class="form-btn">
@@ -28,7 +25,6 @@
 </template>
 <script>
   import {login} from 'api/user';
-  import {sendCaptcha} from 'api/general';
   import {setTitle, setUser} from 'common/js/util';
   import {directiveMixin, interfaceMixin} from 'common/js/mixin';
   import FullLoading from 'base/full-loading/full-loading';
@@ -38,36 +34,22 @@
     mixins: [directiveMixin, interfaceMixin],
     data() {
       return {
-        sending: false,
         loadFlag: false,
         loadText: '',
         mobile: '',
-        captcha: '',
-        captBtnText: '获取验证码'
+        pwd: ''
       };
     },
     created() {
       setTitle('登录');
     },
     methods: {
-      sendCaptcha() {
-        this.$validator.validate('mobile').then((result) => {
-          if (result) {
-            this.sending = true;
-            sendCaptcha(this.mobile, 805041).then(() => {
-              this._setInterval();
-            }).catch(() => {
-              this._clearInterval();
-            });
-          }
-        });
-      },
       login() {
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.loadFlag = true;
             this.loadText = '登录中...';
-            login(this.mobile, this.captcha).then((data) => {
+            login(this.mobile, this.pwd).then((data) => {
               setUser(data);
               this.loadFlag = false;
               this.$router.replace('/zmrz');
@@ -81,27 +63,7 @@
             });
           }
         });
-      },
-      _setInterval() {
-        let i = 60;
-        this.timer = setInterval(() => {
-          if (i === 0) {
-            this._clearInterval();
-          } else {
-            this.captBtnText = i-- + 's';
-          }
-        }, 1000);
-      },
-      _clearInterval() {
-        if (this.timer) {
-          clearInterval(this.timer);
-          this.sending = false;
-          this.captBtnText = '获取验证码';
-        }
       }
-    },
-    beforeDestroy() {
-      this.timer && clearInterval(this.timer);
     },
     components: {
       FullLoading,

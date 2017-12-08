@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 Vue.use(Router);
-
+// 判断第一次进来时的跳转页面
+const Redirect = () => import('pages/redirect/redirect');
 // 登录
 const Login = () => import('pages/login/login');
 // 填写完成
@@ -19,13 +20,15 @@ const Hygzqd = () => import('pages/hygzqd/hygzqd');
 const Zmfrz = () => import('pages/zmfrz/zmfrz');
 // 运营商认证
 const Yysrz = () => import('pages/yysrz/yysrz');
+// 报告
+const Report = () => import('pages/report/report');
 
 export default new Router({
   mode: 'history',
   routes: [
     {
       path: '/',
-      component: Login
+      component: Redirect
     },
     {
       path: '/login',
@@ -58,6 +61,10 @@ export default new Router({
     {
       path: '/yysrz',
       component: Yysrz
+    },
+    {
+      path: '/report',
+      component: Report
     }
   ]
 });

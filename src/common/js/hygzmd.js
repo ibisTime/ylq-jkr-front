@@ -1,4 +1,4 @@
-const event_max_amt_code = {
+const eventMaxAmtCode = {
   name: '历史最大逾期金额（元）',
   'M01': '0~500',
   'M02': '500~1000',
@@ -67,7 +67,7 @@ const HY_DATA = {
             'AA001016': '逾期180天以上'
           },
           extendInfo: { // {[key: 'event_end_time_desc', value: '2017-09', description: '违约时间'],...}
-            'event_max_amt_code': event_max_amt_code,
+            'event_max_amt_code': eventMaxAmtCode,
             'event_end_time_desc': {
               name: '违约时间'
             }
@@ -183,7 +183,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD002': {
@@ -204,7 +204,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD003': {
@@ -225,7 +225,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD004': {
@@ -246,7 +246,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD005': {
@@ -267,7 +267,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD006': {
@@ -288,7 +288,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD007': {
@@ -309,7 +309,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD008': {
@@ -330,7 +330,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD009': {
@@ -351,7 +351,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AD010': {
@@ -388,7 +388,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         }
       }
@@ -458,7 +458,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '处罚时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         }
       }
@@ -484,7 +484,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AG002': {
@@ -505,7 +505,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AG003': {
@@ -526,7 +526,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AG004': {
@@ -577,7 +577,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         }
       }
@@ -601,7 +601,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         }
       }
@@ -627,7 +627,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         },
         'AK002': {
@@ -648,7 +648,7 @@ const HY_DATA = {
             'event_end_time_desc': {
               name: '违约时间'
             },
-            'event_max_amt_code': event_max_amt_code
+            'event_max_amt_code': eventMaxAmtCode
           }
         }
       }

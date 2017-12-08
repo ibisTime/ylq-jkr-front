@@ -26,6 +26,7 @@
   import FullLoading from 'base/full-loading/full-loading';
   import {setTitle} from 'common/js/util';
   import {directiveMixin} from 'common/js/mixin';
+  import {getZhiMaUrl} from 'api/user';
 
   export default {
     mixins: [directiveMixin],
@@ -43,7 +44,9 @@
       login() {
         this.$validator.validateAll().then((result) => {
           if (result) {
-            console.log(result);
+            getZhiMaUrl(this.idCard, this.realname).then((data) => {
+              location.href = data.invokeUrl;
+            });
           }
         });
       }
