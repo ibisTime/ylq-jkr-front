@@ -3,14 +3,17 @@
     <confirm ref="dwConfirm" text="点击确定进行位置认证" :isAlert="isAlert" @confirm="handleDw"></confirm>
     <confirm ref="qzConfirm" text="点击确定进行欺诈认证" :isAlert="isAlert" @confirm="handleQz"></confirm>
     <confirm ref="tdConfirm" text="点击确定进行同盾认证" :isAlert="isAlert" @confirm="handleTd"></confirm>
+    <confirm ref="txlConfirm" text="您还剩通讯录未认证，点击确定前往app进行认证" @confirm="goApp"></confirm>
     <full-loading v-show="loadFlag" :title="loadText"></full-loading>
     <toast ref="toast" :text="toastText" :delay="delay"></toast>
+    <no-result v-show="noResult" title="暂无调查中的报告"></no-result>
   </div>
 </template>
 <script>
   import Confirm from 'base/confirm/confirm';
   import FullLoading from 'base/full-loading/full-loading';
   import Toast from 'base/toast/toast';
+  import NoResult from 'base/no-result/no-result';
   import {getLocation} from 'common/js/location';
 
   export default {
@@ -18,7 +21,8 @@
       return {
         loadFlag: false,
         loadText: '',
-        toastText: ''
+        toastText: '',
+        noResult: false
       };
     },
     created() {
@@ -33,6 +37,11 @@
           this.$refs.qzConfirm.show();
         } else if (type === 'TD') {
           this.$refs.tdConfirm.show();
+        } else if (type === 'TXL') {
+          this.$refs.txlConfirm.show();
+        } else if (type === 'LOADING') {
+          this.loadText = '加载中...';
+          this.loadFlag = true;
         }
       },
       hide(type) {
@@ -42,6 +51,10 @@
           this.$refs.qzConfirm.hide();
         } else if (type === 'TD') {
           this.$refs.tdConfirm.hide();
+        } else if (type === 'TXL') {
+          this.$refs.txlConfirm.hide();
+        } else if (type === 'LOADING') {
+          this.loadFlag = false;
         }
       },
       handleDw() {
@@ -66,11 +79,15 @@
       showToast(msg) {
         this.toastText = msg;
         this.$refs.toast.show();
+      },
+      goApp() {
+        alert('未实现');
       }
     },
     components: {
       Toast,
       Confirm,
+      NoResult,
       FullLoading
     }
   };

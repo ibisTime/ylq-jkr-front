@@ -45,6 +45,68 @@ export function clearUser() {
 export function isLogin() {
   return !!getUserId();
 }
+// 设置调查单编号和对应的报告单的编号
+export function setSearchReportCode(searchCode, reportCode) {
+  sessionStorage['searchCode'] = searchCode;
+  sessionStorage['reportCode'] = reportCode;
+}
+// 获取调查单编号
+export function getSearchCode() {
+  return sessionStorage['searchCode'] || '';
+}
+// 获取报告单的编号
+export function getReportCode() {
+  return sessionStorage['reportCode'] || '';
+}
+// 获取调查单编号和对应的报告单的编号
+export function getSearchReportCode() {
+  return {
+    searchCode: sessionStorage['searchCode'] || '',
+    reportCode: sessionStorage['reportCode'] || ''
+  };
+}
+// 设置当前每个接口完成的状况
+export function setInterfaceInfo(arr) {
+  sessionStorage['interface'] = JSON.stringify(arr);
+}
+// 获取当前每个接口完成的状况
+export function getInterfaceInfo() {
+  let result = sessionStorage['interface'];
+  return result ? JSON.parse(result) : null;
+}
+// 更新某个接口的完成情况
+// [{ name: '', complete: false, data: {} }]
+export function updateInterface(name, complete, data) {
+  let result = getInterfaceInfo();
+  if (result) {
+    let newList = result.map((item) => {
+      if (item.name === name) {
+        item.complete = complete;
+        item.data = data || item.data;
+      }
+      return item;
+    });
+    setInterfaceInfo(newList);
+  }
+}
+
+// 保存身份证和姓名
+export function setRealInfo(idno, realname) {
+  sessionStorage['__real__'] = JSON.stringify({idno, realname});
+}
+// 获取身份证和姓名
+export function getRealInfo(idno, realname) {
+  let result = sessionStorage['__real__'];
+  return result ? JSON.parse(result) : null;
+}
+// 设置当前查看的接口，用于芝麻回调页面的判断
+export function setCurRouter(router) {
+  sessionStorage['__curR__'] = router;
+}
+// 获取当前查看的接口，用于芝麻回调页面的判断
+export function getCurRouter() {
+  return sessionStorage['__curR__'] || '';
+}
 
 // 是否为空
 export function isUnDefined(value) {
@@ -199,182 +261,6 @@ export function getImgData(fileType, img, dir, next) {
     next(canvas.toDataURL(fileType, 0.8));
   };
   image.src = img;
-}
-
-// 校验短信验证码
-export function captValid(capt) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(capt)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (!/^\d{4}$/.test(capt)) {
-    result.err = 1;
-    result.msg = '格式错误';
-  }
-  return result;
-}
-
-// 校验手机号
-export function mobileValid(mobile) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(mobile)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (!/^1[3|4|5|7|8]\d{9}$/.test(mobile)) {
-    result.err = 1;
-    result.msg = '格式错误';
-  }
-  return result;
-}
-
-// 支付密码校验
-export function tradeValid(trade) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(trade)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (trade.length < 6) {
-    result.err = 1;
-    result.msg = '长度不能小于6位';
-  }
-  return result;
-}
-
-// 校验第二次密码是否和第一次相同
-export function rePwdValid(rePwd, pwd) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(rePwd)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (pwd !== rePwd) {
-    result.err = 1;
-    result.msg = '两次密码不同';
-  }
-  return result;
-}
-
-// 昵称校验
-export function nicknameValid(nickname) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(nickname)) {
-    result.err = 1;
-    result.msg = '昵称不能为空';
-  } else if (nickname.length > 10) {
-    result.err = 1;
-    result.msg = '昵称不能超过10位';
-  }
-  return result;
-}
-
-// 真实姓名校验
-export function realNameValid(realName) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(realName)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (realName.length > 16) {
-    result.err = 1;
-    result.msg = '不能超过16位';
-  }
-  return result;
-}
-// 银行名称校验
-export function bankNameValid(bankName) {
-  return realNameValid(bankName);
-}
-// 支行校验
-export function subbranchValid(subbranch) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(subbranch)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (subbranch.length > 255) {
-    result.err = 1;
-    result.msg = '不能超过255位';
-  }
-  return result;
-}
-
-// 银行卡号校验
-export function bankcardNumberValid(bankcardNumber) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(bankcardNumber)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (!/^(\d{16}|\d{19})$/.test(bankcardNumber)) {
-    result.err = 1;
-    result.msg = '格式错误';
-  }
-  return result;
-}
-
-// 金额校验
-export function amountValid(amount) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(amount)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (!/^\d+(?:\.\d{1,2})?$/.test(amount)) {
-    result.err = 1;
-    result.msg = '最多两位小数';
-  }
-  return result;
-}
-
-// 非空校验
-export function emptyValid(value) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(value)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  }
-  return result;
-}
-
-// 地址校验
-export function addressValid(value) {
-  let result = {
-    err: 0,
-    msg: ''
-  };
-  if (isUnDefined(value)) {
-    result.err = 1;
-    result.msg = '不能为空';
-  } else if (value.length > 50) {
-    result.err = 1;
-    result.msg = '长度不能超过50位';
-  }
-  return result;
 }
 
 /**

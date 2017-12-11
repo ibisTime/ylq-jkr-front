@@ -187,51 +187,43 @@
       </div>
     </div>
     <full-loading v-show="loadFlag" :title="loadText"></full-loading>
+    <comm-confirm ref="commConfirm"></comm-confirm>
+    <toast ref="toast" text="信息认证失败，请检查数据无误后，重新提交"></toast>
   </div>
 </template>
 <script>
   import CityPicker from 'base/city-picker/city-picker';
   import FullLoading from 'base/full-loading/full-loading';
+  import Toast from 'base/toast/toast';
+  import CommConfirm from 'components/comm-confirm/comm-confirm';
   import {getDictList} from 'api/general';
+  import {setUserInfo} from 'api/biz';
   import {setTitle} from 'common/js/util';
+  import {directiveMixin, interfaceMixin} from 'common/js/mixin';
 
   export default {
+    mixins: [directiveMixin, interfaceMixin],
     data() {
       return {
         loadFlag: true,
         loadText: '加载中...',
         education: null,
-        educationList: [{
-          dkey: 0,
-          dvalue: '小学'
-        }],
+        educationList: [],
         marriage: null,
-        marriageList: [{
-          dkey: 0,
-          dvalue: '未婚'
-        }],
+        marriageList: [],
         childrenNum: '',
         province: '北京市',
         city: '北京市',
         district: '昌平区',
         address: '',
         liveTime: null,
-        liveTimeList: [{
-          dkey: 0,
-          dvalue: '三个月'
-        }],
+        liveTimeList: [],
         qq: '',
         email: '',
         occupation: null,
-        occupationList: [{
-          dkey: 0,
-          dvalue: '程序员'
-        }],
+        occupationList: [],
         income: null,
-        incomeList: [{
-          dkey: 0,
-          dvalue: '少于1000元'
-        }],
+        incomeList: [],
         compProvince: '北京市',
         compCity: '北京市',
         compDistrict: '昌平区',
@@ -239,17 +231,11 @@
         companyAddress: '',
         phone: '',
         familyRelation: null,
-        familyRelationList: [{
-          dkey: 0,
-          dvalue: '父母'
-        }],
+        familyRelationList: [],
         familyName: '',
         familyMobile: '',
         societyRelation: null,
-        societyRelationList: [{
-          dkey: 0,
-          dvalue: '同学'
-        }],
+        societyRelationList: [],
         societyName: '',
         societyMobile: ''
       };
@@ -277,7 +263,7 @@
       getDictList() {
         return getDictList().then((data) => {
           data.forEach((item) => {
-            switch (item.parent_key) {
+            switch (item.parentKey) {
               case 'education':
                 this.educationList.push(item); break;
               case 'marriage':
@@ -317,14 +303,55 @@
       submit() {
         this.$validator.validateAll().then((result) => {
           if (result) {
-            console.log(result);
+            this.loadText = '提交中...';
+            this.loadFlag = true;
+            let {education: {dkey: education}, marriage: {dkey: marriage},
+              childrenNum, address, liveTime: {dkey: liveTime}, qq, email,
+              occupation: {dkey: occupation}, income: {dkey: income},
+              company, companyAddress, phone, familyRelation: {dkey: familyRelation},
+              familyName, familyMobile, societyRelation: {dkey: societyRelation},
+              societyName, societyMobile} = this.$data;
+            setUserInfo({
+              education,
+              marriage,
+              childrenNum,
+              address,
+              liveTime,
+              qq,
+              email,
+              occupation,
+              income,
+              company,
+              companyAddress,
+              phone,
+              familyRelation,
+              familyName,
+              familyMobile,
+              societyRelation,
+              societyName,
+              societyMobile,
+              companyProvinceCity: this.companyProvinceCity,
+              provinceCity: this.provinceCity
+            }).then((data) => {
+              this.loadFlag = false;
+              if (data.isSuccess) {
+                this.updateInterface('F3', true);
+                this.goNextPage();
+              } else {
+                this.$refs.toast.show();
+              }
+            }).catch(() => {
+              this.loadFlag = false;
+            });
           }
         });
       }
     },
     components: {
+      Toast,
       CityPicker,
-      FullLoading
+      FullLoading,
+      CommConfirm
     }
   };
 </script>

@@ -15,18 +15,6 @@ export function login(loginName, loginPwd) {
   });
 }
 /**
- * 获取授权芝麻信用链接
- * @param {string} idNo
- * @param {string} realName
- */
-export function getZhiMaUrl(idNo, realName) {
-  return fetch(805195, {
-    idNo,
-    realName,
-    userId: getUserId()
-  }, true);
-}
-/**
  * 获取用户详情
  */
 export function getUser() {

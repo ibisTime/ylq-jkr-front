@@ -18,7 +18,7 @@
 </template>
 <script>
   import FullLoading from 'base/full-loading/full-loading';
-  import {setTitle} from 'common/js/util';
+  import {setTitle, setCurRouter} from 'common/js/util';
   export default {
     data() {
       return {
@@ -27,6 +27,7 @@
       };
     },
     created() {
+      setCurRouter('PZM5');
       setTitle('芝麻分认证');
     },
     methods: {

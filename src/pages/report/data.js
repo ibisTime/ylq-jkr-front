@@ -1,5 +1,5 @@
-const testData = [
-  {
+const testData = {
+  detail1: [{
     'bizCode': 'AA',
     'code': 'AA001003',
     'extendInfo': [
@@ -235,7 +235,7 @@ const testData = [
     'refreshTime': 'Nov 17, 2017 12:00:00 AM',
     'settlement': false,
     'type': 'AA001'
-  }
-];
+  }]
+};
 
 export default testData;

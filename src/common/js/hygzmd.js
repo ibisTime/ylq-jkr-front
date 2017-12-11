@@ -66,7 +66,7 @@ const HY_DATA = {
             'AA001015': '逾期151-180天',
             'AA001016': '逾期180天以上'
           },
-          extendInfo: { // {[key: 'event_end_time_desc', value: '2017-09', description: '违约时间'],...}
+          extendInfo: { // [{key: 'event_end_time_desc', value: '2017-09', description: '违约时间'},...]
             'event_max_amt_code': eventMaxAmtCode,
             'event_end_time_desc': {
               name: '违约时间'

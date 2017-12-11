@@ -18,6 +18,8 @@ const Information = () => import('pages/information/information');
 const Hygzqd = () => import('pages/hygzqd/hygzqd');
 // 芝麻分认证
 const Zmfrz = () => import('pages/zmfrz/zmfrz');
+// 芝麻认证校验是否成功
+const CheckZm = () => import('pages/check-zm/check-zm');
 // 运营商认证
 const Yysrz = () => import('pages/yysrz/yysrz');
 // 报告
@@ -31,6 +33,10 @@ export default new Router({
       component: Redirect
     },
     {
+      path: '/redirect',
+      component: Redirect
+    },
+    {
       path: '/login',
       component: Login
     },
@@ -41,6 +47,10 @@ export default new Router({
     {
       path: '/zmrz',
       component: Zmrz
+    },
+    {
+      path: '/check-zm',
+      component: CheckZm
     },
     {
       path: '/sfzsc',

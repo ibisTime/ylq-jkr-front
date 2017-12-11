@@ -9,7 +9,7 @@
   export default {
     created() {
       if (!isLogin()) {
-        this.$router.push('/login');
+        this.$router.replace('/login');
       }
     }
   };

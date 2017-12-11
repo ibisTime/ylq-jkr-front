@@ -39,14 +39,14 @@ app.use('/api', function (req, res) {
   axios.post(url, param).then((response) => {
     var ret = response.data
     if (typeof ret === 'string') {
-    var reg = /^\w+\(({[^()]+})\)$/
-    var matches = ret.match(reg)
-    if (matches) {
-      ret = JSON.parse(matches[1])
+      var reg = /^\w+\(({[^()]+})\)$/
+      var matches = ret.match(reg)
+      if (matches) {
+        ret = JSON.parse(matches[1])
+      }
     }
-  }
-  res.json(ret)
-}).catch((e) => {
+    res.json(ret)
+  }).catch((e) => {
     // console.log(e)
   })
 })

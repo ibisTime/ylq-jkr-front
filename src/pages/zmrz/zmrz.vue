@@ -24,9 +24,9 @@
 </template>
 <script>
   import FullLoading from 'base/full-loading/full-loading';
-  import {setTitle} from 'common/js/util';
+  import {setTitle, setCurRouter, setRealInfo} from 'common/js/util';
   import {directiveMixin} from 'common/js/mixin';
-  import {getZhiMaUrl} from 'api/user';
+  import {getZhiMaUrl} from 'api/biz';
 
   export default {
     mixins: [directiveMixin],
@@ -38,14 +38,16 @@
       };
     },
     created() {
+      setCurRouter('F2');
       setTitle('芝麻认证');
     },
     methods: {
       login() {
         this.$validator.validateAll().then((result) => {
           if (result) {
-            getZhiMaUrl(this.idCard, this.realname).then((data) => {
-              location.href = data.invokeUrl;
+            setRealInfo(this.idCard, this.realname);
+            getZhiMaUrl(this.idCard, this.realname).then((url) => {
+              location.href = url;
             });
           }
         });
