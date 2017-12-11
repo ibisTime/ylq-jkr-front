@@ -14,7 +14,7 @@
       </div>
     </div>
     <full-loading v-show="loadFlag" title="提交中..."></full-loading>
-    <comm-confirm ref="commConfirm"></comm-confirm>
+    <comm-confirm ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
   </div>
 </template>
 <script>
@@ -42,7 +42,9 @@
         let _interface = getInterfaceInfo().filter(v => v.name === 'F2');
         _interface = _interface.length && _interface[0] || {};
         if (_interface.data) {
-          _interface.data = JSON.parse(_interface.data);
+          if (typeof _interface.data === 'string') {
+            _interface.data = JSON.parse(_interface.data);
+          }
           this.realName = _interface.data.realName;
           this.idNo = _interface.data.idNo;
         } else {

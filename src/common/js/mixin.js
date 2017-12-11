@@ -165,6 +165,10 @@ export const interfaceMixin = {
         return result;
       }
       return null;
+    },
+    checkSuc({name, complete, data}) {
+      this.updateInterface(name, complete, data);
+      this.goNextPage();
     }
   }
 };

@@ -2,12 +2,12 @@
     <div class="hygz-list-wrapper" v-show="data">
       <split-bar @toggle="toggle" :isHide="isHide" title="行业关注清单"></split-bar>
       <div class="list-wrap" ref="listWrap" :class="{hide: isHide}">
-        <template ng-if="hygzList.length">
+        <template v-if="hygzList.length">
           <div v-for="item in hygzList" class="list-item border-bottom-1px">
             <p v-for="cont in item.detail">{{cont}}</p>
           </div>
         </template>
-        <div ng-if="!hygzList.length" class="list-item border-bottom-1px">
+        <div v-if="!hygzList.length" class="list-item border-bottom-1px">
            <p>未被关注</p>
         </div>
       </div>

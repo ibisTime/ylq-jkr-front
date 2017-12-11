@@ -187,7 +187,7 @@
       </div>
     </div>
     <full-loading v-show="loadFlag" :title="loadText"></full-loading>
-    <comm-confirm ref="commConfirm"></comm-confirm>
+    <comm-confirm ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
     <toast ref="toast" text="信息认证失败，请检查数据无误后，重新提交"></toast>
   </div>
 </template>

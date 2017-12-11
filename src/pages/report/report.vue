@@ -1,13 +1,13 @@
 <template>
   <div class="report-wrapper">
     <jbxx-list :data="jbxxList" :dict="hygzDict"></jbxx-list>
-    <div class="split-bar border-bottom-1px">身份证照片</div>
+    <!-- <div class="split-bar border-bottom-1px">身份证照片</div>
     <div class="split-bar border-bottom-1px">通讯录认证</div>
     <div class="split-bar border-bottom-1px">运营商认证</div>
-    <div class="split-bar border-bottom-1px">芝麻分认证</div>
+    <div class="split-bar border-bottom-1px">芝麻分认证</div> -->
     <hygz-list :data="hygzList"></hygz-list>
-    <div class="split-bar border-bottom-1px">欺诈三接口</div>
-    <div class="split-bar border-bottom-1px">同盾认证</div>
+    <!-- <div class="split-bar border-bottom-1px">欺诈三接口</div>
+    <div class="split-bar border-bottom-1px">同盾认证</div> -->
     <full-loading v-show="loadFlag"></full-loading>
   </div>
 </template>

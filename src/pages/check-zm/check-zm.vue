@@ -1,7 +1,7 @@
 <template>
   <div class="check-zm-wrapper">
     <full-loading v-show="loadFlag" title="认证中..."></full-loading>
-    <comm-confirm ref="commConfirm"></comm-confirm>
+    <comm-confirm ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
   </div>
 </template>
 <script>
@@ -33,7 +33,7 @@
           if (data.authorized) {
             let info = getRealInfo();
             if (info) {
-              this.updateInterface('F2', true, {idNo: info.info, realName: info.realname});
+              this.updateInterface('F2', true, {idNo: info.idno, realName: info.realname});
               this.goNextPage();
             } else {
               this.$router.push('/redirect');

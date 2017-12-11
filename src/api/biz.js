@@ -44,6 +44,7 @@ export function checkZM(searchCode) {
 }
 /**
  * 用户基本信息认证
+ * @param {object} data
  */
 export function setUserInfo(data) {
   return fetch(805253, {
@@ -51,9 +52,34 @@ export function setUserInfo(data) {
     searchCode: getSearchCode()
   }, true);
 }
+/**
+ * 行业关注清单认证
+ * @param {string} searchCode
+ */
 export function checkHygzqd(searchCode) {
   return fetch(805259, {
     searchCode,
     isH5: '1'
+  });
+}
+/**
+ * 强制定位
+ * @param {string} province
+ * @param {string} city
+ * @param {string} area
+ * @param {string} address
+ * @param {string} longitude
+ * @param {string} latitude
+ * @param {string} searchCode
+ */
+export function setUserPosition(province, city, area, address, longitude, latitude, searchCode) {
+  return fetch(805255, {
+    address,
+    area,
+    city,
+    latitude,
+    longitude,
+    province,
+    searchCode
   });
 }

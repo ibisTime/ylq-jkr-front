@@ -6,7 +6,7 @@
     <confirm ref="txlConfirm" text="您还剩通讯录未认证，点击确定前往app进行认证" @confirm="goApp"></confirm>
     <full-loading v-show="loadFlag" :title="loadText"></full-loading>
     <toast ref="toast" :text="toastText" :delay="delay"></toast>
-    <no-result v-show="noResult" title="暂无调查中的报告"></no-result>
+    <no-result class="no-result-wrapper" v-show="noResult" title="暂无未完成的调查单"></no-result>
   </div>
 </template>
 <script>
@@ -15,6 +15,8 @@
   import Toast from 'base/toast/toast';
   import NoResult from 'base/no-result/no-result';
   import {getLocation} from 'common/js/location';
+  import {getSearchCode} from 'common/js/util';
+  import {setUserPosition} from 'api/biz';
 
   export default {
     data() {
@@ -61,18 +63,29 @@
         this.loadFlag = true;
         this.loadText = '定位中...';
         getLocation().then((data) => {
-          /**
-           * data.position.lng, data.position.lat
-           * data.addressComponent.address
-           */
-          this.loadFlag = false;
+          let searchCode = getSearchCode();
+          let {lng: longitude, lat: latitude} = data.position;
+          let {province, city, area, address} = data.addressComponent;
+          setUserPosition(province, city, area, address, longitude, latitude, searchCode).then(() => {
+            this.$emit('checkSuc', {
+              name: 'PDW2',
+              complete: true
+            });
+            this.loadFlag = false;
+          }).catch(() => {
+            this.dwError();
+          });
         }).catch(() => {
-          this.showToast('定位失败，请重新进行定位');
-          setTimeout(() => {
-            this.$refs.dwConfirm.show();
-          }, 500);
-          this.loadFlag = false;
+          this.dwError();
         });
+      },
+      dwError() {
+        this.loadFlag = false;
+        this.showToast('定位失败，请重新进行定位');
+        setTimeout(() => {
+          this.$refs.dwConfirm.show();
+        }, 500);
+        this.loadFlag = false;
       },
       handleQz() {},
       handleTd() {},
@@ -93,4 +106,10 @@
   };
 </script>
 <style lang="scss" scoped>
+  .no-result-wrapper {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
 </style>
