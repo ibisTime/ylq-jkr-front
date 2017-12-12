@@ -63,6 +63,21 @@ export function checkHygzqd(searchCode) {
   });
 }
 /**
+ * 身份证正反面认证
+ * @param {string} identifyPic
+ * @param {string} identifyPicReverse
+ * @param {string} identifyPicHand
+ * @param {string} searchCode
+ */
+export function checkSfz(identifyPic, identifyPicReverse, identifyPicHand, searchCode) {
+  return fetch(805254, {
+    identifyPic,
+    identifyPicReverse,
+    identifyPicHand,
+    searchCode
+  });
+}
+/**
  * 强制定位
  * @param {string} province
  * @param {string} city
@@ -82,4 +97,14 @@ export function setUserPosition(province, city, area, address, longitude, latitu
     province,
     searchCode
   });
+}
+/**
+ * 芝麻信用分认证
+ * @param {string} searchCode
+ */
+export function checkZMF(searchCode) {
+  return fetch(805258, {
+    searchCode,
+    isH5: 1
+  })
 }

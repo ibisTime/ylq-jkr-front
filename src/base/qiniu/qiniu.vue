@@ -90,9 +90,7 @@
             this.$emit('beforeUpload', file, e);
             file.request = this.upload(file);
             file.uploadPromise = file.request.promise();
-            file.uploadPromise.catch((error) => {
-              this.$emit('error', error, file);
-            });
+            this.$emit('afterUpload', file, e);
           }
         }
       },

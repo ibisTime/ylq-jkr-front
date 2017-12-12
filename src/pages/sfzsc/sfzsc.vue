@@ -11,40 +11,61 @@
       <div class="photos clearfix">
         <div class="item">
           <div class="inner">
-            <qiniu class="qiniu" @beforeUpload="beforeUpload1" @error="handleError" :multiple="multiple" :token="token">
-              <img src="./sfz1@2x.png"/>
-            </qiniu>
+            <div class="inner-content">
+              <qiniu class="qiniu" @afterUpload="afterUpload1" :multiple="multiple" :token="token">
+                <img v-show="!pic1.status" src="./sfz1@2x.png"/>
+                <div class="img" v-show="pic1.status=='OK'" :style="getBg(pic1)"></div>
+              </qiniu>
+            </div>
             <div class="text">上传身份证正面照片</div>
           </div>
         </div>
         <div class="item">
           <div class="inner">
-            <qiniu class="qiniu" @beforeUpload="beforeUpload2" @error="handleError" :multiple="multiple" :token="token">
-              <img src="./sfz2@2x.png"/>
-            </qiniu>
+            <div class="inner-content">
+              <qiniu class="qiniu" @afterUpload="afterUpload2" :multiple="multiple" :token="token">
+                <img v-show="!pic2.status" src="./sfz2@2x.png"/>
+                <div class="img" v-show="pic2.status=='OK'" :style="getBg(pic2)"></div>
+              </qiniu>
+            </div>
             <div class="text">上传身份证反面照片</div>
           </div>
         </div>
       </div>
     </div>
     <div class="photos photos1">
-      <qiniu class="qiniu" @beforeUpload="beforeUpload3" @error="handleError" :multiple="multiple" :token="token">
-        <img width="100%" src="./sfz3@2x.png"/>
+      <qiniu class="qiniu" @afterUpload="afterUpload3" :multiple="multiple" :token="token">
+        <img v-show="!pic3.status" width="100%" src="./sfz3@2x.png"/>
+        <img v-show="pic3.status=='OK'" width="100%" :src="formatImg(pic3)"/>
       </qiniu>
-      <div class="text">上传手持身份证照片</div>
+      <div class="text1">上传手持身份证照片</div>
     </div>
-    <div class="btn-wrap"><button class="btn-primary">提交</button></div>
+    <div class="btn-wrap"><button class="btn-primary" @click="submit">提交</button></div>
     <toast :text="errTxt" ref="toast"></toast>
+    <full-loading v-show="loadFlag" :title="loadText"></full-loading>
+    <comm-confirm ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
   </div>
 </template>
 <script>
   import Qiniu from 'base/qiniu/qiniu';
   import Toast from 'base/toast/toast';
-  import {setTitle} from 'common/js/util';
+  import FullLoading from 'base/full-loading/full-loading';
+  import CommConfirm from 'components/comm-confirm/comm-confirm';
+  import {setTitle, formatImg, getSearchCode} from 'common/js/util';
+  import {interfaceMixin} from 'common/js/mixin';
+  import {getQiniuToken} from 'api/general';
+  import {checkSfz} from 'api/biz';
+
+  const OK = 'OK';
+  const PENDING = 'PENDING';
+  const ERR = 'ERR';
 
   export default {
+    mixins: [interfaceMixin],
     data() {
       return {
+        loadFlag: true,
+        loadText: '加载中...',
         token: '',
         pic1: {},
         pic2: {},
@@ -55,43 +76,78 @@
     created() {
       setTitle('身份证上传');
       this.multiple = false;
+      getQiniuToken().then((data) => {
+        this.loadFlag = false;
+        this.token = data.uploadToken;
+      }).catch(() => {
+        this.loadFlag = false;
+      });
     },
     methods: {
-      beforeUpload1(file) {
-        this.pic1 = {
-          key: file.key,
-          preview: file.preview
-        };
-        file.onprogress = (e) => {
-          console.log(e);
-        };
+      afterUpload1(file) {
+        this.handlePicUpload('pic1', file);
       },
-      beforeUpload2(file) {
-        this.pic2 = {
-          key: file.key,
-          preview: file.preview
-        };
-        file.onprogress = (e) => {
-          console.log(e);
-        };
+      afterUpload2(file) {
+        this.handlePicUpload('pic2', file);
       },
-      beforeUpload3(file) {
-        this.pic3 = {
-          key: file.key,
-          preview: file.preview
-        };
-        file.onprogress = (e) => {
-          console.log(e);
-        };
+      afterUpload3(file) {
+        this.handlePicUpload('pic3', file);
       },
-      handleError(err) {
-        this.errTxt = err.message || '图片上传出错';
+      handlePicUpload(picKey, file) {
+        this[picKey] = {
+          preview: file.preview,
+          status: PENDING
+        };
+        file.uploadPromise.then((data) => {
+          this[picKey].key = data.body.key;
+          this[picKey].status = OK;
+        }).catch(() => {
+          this[picKey].status = ERR;
+          this.handleError();
+        });
+      },
+      handleError(msg) {
+        this.errTxt = msg || '图片上传出错';
         this.$refs.toast.show();
+      },
+      submit() {
+        if (!(this.pic1.key && this.pic1.status === OK)) {
+          this.handleError('身份证正面照片未上传成功');
+        } else if (!(this.pic2.key && this.pic2.status === OK)) {
+          this.handleError('身份证反面照片未上传成功');
+        } else if (!(this.pic3.key && this.pic3.status === OK)) {
+          this.handleError('手持身份证照片未上传成功');
+        } else {
+          this.loadText = '提交中...';
+          this.loadFlag = true;
+          checkSfz(this.pic1.key, this.pic2.key, this.pic3.key, getSearchCode()).then((data) => {
+            this.loadFlag = false;
+            if (data.isSuccess) {
+              this.updateInterface('PID1', true);
+              this.goNextPage();
+            } else {
+              this.handleError('身份证认证失败，请检查数据无误后，重新提交');
+            }
+          }).catch(() => {
+            this.loadFlag = false;
+          });
+        }
+      },
+      getBg(photo) {
+        let url = photo.preview || formatImg(photo.key);
+        return {
+          backgroundImage: `url(${url})`
+        };
+      },
+      formatImg(photo) {
+        return photo.preview || formatImg(photo.key);
       }
     },
     components: {
       Qiniu,
-      Toast
+      Toast,
+      CommConfirm,
+      FullLoading
     }
   };
 </script>
@@ -114,6 +170,15 @@
       }
     }
     .text {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      /*margin-top: 0.4rem;*/
+      text-align: center;
+      font-size: $font-size-medium;
+      color: $color-text-l;
+    }
+    .text1 {
       margin-top: 0.4rem;
       text-align: center;
       font-size: $font-size-medium;
@@ -153,6 +218,23 @@
         margin-top: 0.2rem;
         background: #fff;
       }
+    }
+    .img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: contain;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+    }
+    .inner-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      bottom: 0.78rem;
     }
     .btn-wrap {
       margin-top: 0.64rem;
