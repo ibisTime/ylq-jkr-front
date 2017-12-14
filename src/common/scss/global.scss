@@ -264,6 +264,12 @@
   align-items: center;
 }
 
+.cd-justify-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
 .full-screen-wrapper {
   position: fixed;
   top: 0;

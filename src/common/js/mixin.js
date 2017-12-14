@@ -35,6 +35,11 @@ export const directiveMixin = {
 // PYYS4:运营商认证, PZM5:芝麻信用认证, PZM6:行业关注清单认证, PZM7:欺诈三接口认证, PTD8:同盾认证
 const INTERFACE_SEQ = ['F1', 'F2', 'F3', 'PID1', 'PDW2', 'PTXL3', 'PYYS4', 'PZM5', 'PZM6', 'PZM7', 'PTD8'];
 export const interfaceMixin = {
+  data() {
+    return {
+      noSearchResult: false
+    };
+  },
   created() {
     if (!getSearchCode()) {
       this.$router.replace('/redirect');
@@ -57,7 +62,7 @@ export const interfaceMixin = {
             this.judgeRouter(this.getNextPage('F1', arr));
           });
         } else {
-          this.noResult = true;
+          this.noSearchResult = true;
         }
       }).catch(() => {
         this.$refs.commConfirm.hide('LOADING');
@@ -77,6 +82,8 @@ export const interfaceMixin = {
                 this.$refs.commConfirm.show('QZ');
               } else if (nextRoute.router === 'PTD8') {
                 this.$refs.commConfirm.show('TD');
+              } else if (nextRoute.router === 'PYYS4') {
+                this.$refs.commConfirm.show('PYYS4');
               }
             }
           } else {  // 只剩通讯录认证了，则提示用户去app端认证
@@ -86,7 +93,7 @@ export const interfaceMixin = {
           this.$router.replace('/investigation-suc');
         }
       } else {  // 无法查到下一步
-        this.noResult = true;
+        this.noSearchResult = true;
       }
     },
     // 根据当前接口完成的状况，跳转到指定页面
@@ -150,7 +157,7 @@ export const interfaceMixin = {
             case 'PID1': result.router = 'sfzsc'; break;
             case 'PDW2': result.router = 'PDW2'; result.jump = false; break;
             case 'PTXL3': result.jump = false; break;
-            case 'PYYS4': result.router = 'yysrz'; break;
+            case 'PYYS4': result.router = 'PYYS4'; result.jump = false; break;
             case 'PZM5': result.router = 'zmfrz'; break;
             case 'PZM6': result.router = 'hygzqd'; break;
             case 'PZM7': result.router = 'PZM7'; result.jump = false; break;
@@ -166,6 +173,7 @@ export const interfaceMixin = {
       }
       return null;
     },
+    // 校验接口是否填写完成，并跳转到相应到路径
     checkSuc({name, complete, data}) {
       this.updateInterface(name, complete, data);
       this.goNextPage();

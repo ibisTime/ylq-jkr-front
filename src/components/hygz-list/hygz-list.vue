@@ -63,10 +63,9 @@
             }
             return result;
           });
-          let that = this;
           setTimeout(() => {
-            that.$refs.listWrap.style.height = that.$refs.listWrap.clientHeight + 'px';
-          }, 20);
+            this.$refs.listWrap.style.height = this.$refs.listWrap.clientHeight + 'px';
+          }, 40);
         }
       }
     },

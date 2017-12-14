@@ -1,7 +1,4 @@
 export const JbxxDict = {
-  'realName': '姓名',
-  'idNo': '身份证号',
-  'mobile': '手机号',
   'education': '学历',
   'marriage': '婚姻',
   'childrenNum': '子女个数',

@@ -99,6 +99,21 @@ export function getRealInfo(idno, realname) {
   let result = sessionStorage['__real__'];
   return result ? JSON.parse(result) : null;
 }
+// 获取报告单中已经填写好的真实姓名和身份证
+export function getRealNameInfo() {
+  let _interface = getInterfaceInfo().filter(v => v.name === 'F2');
+  _interface = _interface.length && _interface[0] || {};
+  if (_interface.data) {
+    if (typeof _interface.data === 'string') {
+      _interface.data = JSON.parse(_interface.data);
+    }
+    return {
+      realName: _interface.data.realName,
+      idNo: _interface.data.idNo
+    };
+  }
+  return null;
+}
 // 设置当前查看的接口，用于芝麻回调页面的判断
 export function setCurRouter(router) {
   sessionStorage['__curR__'] = router;

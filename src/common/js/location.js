@@ -30,7 +30,7 @@ export function getLocation() {
             city,
             area,
             township,
-            address: province + city + area + township + addressComponent.street + addressComponent.streetNumber
+            address: township + addressComponent.street + addressComponent.streetNumber
           }
         };
         resolve(result);

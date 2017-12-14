@@ -1,6 +1,6 @@
 <template>
   <div class="redirect-wrapper">
-    <comm-confirm ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
+    <comm-confirm :noResult="noSearchResult" ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
   </div>
 </template>
 <script>

@@ -43,7 +43,7 @@
     <div class="btn-wrap"><button class="btn-primary" @click="submit">提交</button></div>
     <toast :text="errTxt" ref="toast"></toast>
     <full-loading v-show="loadFlag" :title="loadText"></full-loading>
-    <comm-confirm ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
+    <comm-confirm :noResult="noSearchResult" ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
   </div>
 </template>
 <script>
@@ -123,8 +123,7 @@
           checkSfz(this.pic1.key, this.pic2.key, this.pic3.key, getSearchCode()).then((data) => {
             this.loadFlag = false;
             if (data.isSuccess) {
-              this.updateInterface('PID1', true);
-              this.goNextPage();
+              this.checkSuc({ name: 'PID1', complete: true });
             } else {
               this.handleError('身份证认证失败，请检查数据无误后，重新提交');
             }

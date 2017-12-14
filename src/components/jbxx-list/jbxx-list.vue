@@ -1,24 +1,39 @@
 <template>
   <div class="jbxx-list-wrapper" v-show="data">
-    <split-bar @toggle="toggle0" :isHide="isHide0" title="基本信息"></split-bar>
-    <div class="list-wrapper" ref="listWrap0" :class="{hide: isHide0}">
-      <div class="list-item cd-flexbox" v-for="item in jbxxList">
-        <div class="title">{{item.title}}</div>
-        <div class="desc cd-flex1">{{item.value}}</div>
+    <split-bar @toggle="toggle" :isHide="isHide" title="基本信息认证"></split-bar>
+    <div class="list-wrapper" ref="listWrap" :class="{hide: isHide}">
+      <div>
+        <div class="inner-split">
+          <div class="cd-flexbox cd-align-center cd-justify-center">
+            <i></i>基本信息<i></i>
+          </div>
+        </div>
+        <div class="list-item cd-flexbox" v-for="item in jbxxList">
+          <div class="title">{{item.title}}</div>
+          <div class="desc cd-flex1">{{item.value}}</div>
+        </div>
       </div>
-    </div>
-    <split-bar @toggle="toggle1" :isHide="isHide1" title="职业信息"></split-bar>
-    <div class="list-wrapper" ref="listWrap1" :class="{hide: isHide1}">
-      <div class="list-item cd-flexbox" v-for="item in zyxxList">
-        <div class="title">{{item.title}}</div>
-        <div class="desc cd-flex1">{{item.value}}</div>
+      <div>
+        <div class="inner-split">
+          <div class="cd-flexbox cd-align-center cd-justify-center">
+            <i></i>职业信息<i></i>
+          </div>
+        </div>
+        <div class="list-item cd-flexbox" v-for="item in zyxxList">
+          <div class="title">{{item.title}}</div>
+          <div class="desc cd-flex1">{{item.value}}</div>
+        </div>
       </div>
-    </div>
-    <split-bar @toggle="toggle2" :isHide="isHide2" title="紧急联系人"></split-bar>
-    <div class="list-wrapper" ref="listWrap2" :class="{hide: isHide2}">
-      <div class="list-item cd-flexbox" v-for="item in jjlxrList">
-        <div class="title">{{item.title}}</div>
-        <div class="desc cd-flex1">{{item.value}}</div>
+      <div>
+        <div class="inner-split">
+          <div class="cd-flexbox cd-align-center cd-justify-center">
+            <i></i>紧急联系人<i></i>
+          </div>
+        </div>
+        <div class="list-item cd-flexbox" v-for="item in jjlxrList">
+          <div class="title">{{item.title}}</div>
+          <div class="desc cd-flex1">{{item.value}}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -35,14 +50,12 @@
       },
       dict: {
         type: Object,
-        default: function () {
-          return {};
-        }
+        default: null
       }
     },
     data() {
       return {
-        isHide0: false,
+        isHide: false,
         isHide1: false,
         isHide2: false,
         jbxxList: [],
@@ -51,8 +64,8 @@
       };
     },
     methods: {
-      toggle0() {
-        this.isHide0 = !this.isHide0;
+      toggle() {
+        this.isHide = !this.isHide;
       },
       toggle1() {
         this.isHide1 = !this.isHide1;
@@ -99,9 +112,7 @@
         this.zyxxList = _zyxxList;
         this.jjlxrList = _jjlxrList;
         setTimeout(() => {
-          this.$refs.listWrap0.style.height = this.$refs.listWrap0.clientHeight + 'px';
-          this.$refs.listWrap1.style.height = this.$refs.listWrap1.clientHeight + 'px';
-          this.$refs.listWrap2.style.height = this.$refs.listWrap2.clientHeight + 'px';
+          this.$refs.listWrap.style.height = this.$refs.listWrap.clientHeight + 'px';
         }, 40);
       }
     },
@@ -146,6 +157,19 @@
         .title {
           flex: 0 0 6em;
         }
+      }
+    }
+    .inner-split {
+      text-align: center;
+      padding: 0.2rem 0.3rem 0.2rem 0;
+      line-height: 0.4rem;
+      font-size: $font-size-medium;
+      i {
+        display: inline-block;
+        width: 0.6rem;
+        height: 1px;
+        background: $color-text;
+        margin: 0 0.18rem;
       }
     }
   }

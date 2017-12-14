@@ -187,7 +187,7 @@
       </div>
     </div>
     <full-loading v-show="loadFlag" :title="loadText"></full-loading>
-    <comm-confirm ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
+    <comm-confirm :noResult="noSearchResult" ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
     <toast ref="toast" text="信息认证失败，请检查数据无误后，重新提交"></toast>
   </div>
 </template>
@@ -335,8 +335,10 @@
             }).then((data) => {
               this.loadFlag = false;
               if (data.isSuccess) {
-                this.updateInterface('F3', true);
-                this.goNextPage();
+                this.checkSuc({
+                  name: 'F3',
+                  complete: true
+                });
               } else {
                 this.$refs.toast.show();
               }

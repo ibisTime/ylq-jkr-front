@@ -20,8 +20,8 @@ const Hygzqd = () => import('pages/hygzqd/hygzqd');
 const Zmfrz = () => import('pages/zmfrz/zmfrz');
 // 芝麻认证校验是否成功
 const CheckZm = () => import('pages/check-zm/check-zm');
-// 运营商认证
-const Yysrz = () => import('pages/yysrz/yysrz');
+// 运营商认证校验是否成功
+const CheckYys = () => import('pages/check-yys/check-yys');
 // 报告
 const Report = () => import('pages/report/report');
 
@@ -69,8 +69,8 @@ export default new Router({
       component: Zmfrz
     },
     {
-      path: '/yysrz',
-      component: Yysrz
+      path: '/check-yys',
+      component: CheckYys
     },
     {
       path: '/report',

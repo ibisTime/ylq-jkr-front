@@ -1,6 +1,7 @@
 <template>
   <div class="comm-confirm-wrapper">
     <confirm ref="dwConfirm" text="点击确定进行位置认证" :isAlert="isAlert" @confirm="handleDw"></confirm>
+    <confirm ref="yysConfirm" text="点击确定进行运营商认证" :isAlert="isAlert" @confirm="handleYys"></confirm>
     <confirm ref="qzConfirm" text="点击确定进行欺诈认证" :isAlert="isAlert" @confirm="handleQz"></confirm>
     <confirm ref="tdConfirm" text="点击确定进行同盾认证" :isAlert="isAlert" @confirm="handleTd"></confirm>
     <confirm ref="txlConfirm" text="您还剩通讯录未认证，点击确定前往app进行认证" @confirm="goApp"></confirm>
@@ -15,16 +16,21 @@
   import Toast from 'base/toast/toast';
   import NoResult from 'base/no-result/no-result';
   import {getLocation} from 'common/js/location';
-  import {getSearchCode} from 'common/js/util';
-  import {setUserPosition} from 'api/biz';
+  import {getSearchCode, setCurRouter} from 'common/js/util';
+  import {setUserPosition, checkQZ, checkTD} from 'api/biz';
 
   export default {
+    props: {
+      noResult: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         loadFlag: false,
         loadText: '',
-        toastText: '',
-        noResult: false
+        toastText: ''
       };
     },
     created() {
@@ -36,11 +42,14 @@
         if (type === 'DW') {
           this.$refs.dwConfirm.show();
         } else if (type === 'QZ') {
+          setCurRouter('PZM7');
           this.$refs.qzConfirm.show();
         } else if (type === 'TD') {
           this.$refs.tdConfirm.show();
         } else if (type === 'TXL') {
           this.$refs.txlConfirm.show();
+        } else if (type === 'PYYS4') {
+          this.$refs.yysConfirm.show();
         } else if (type === 'LOADING') {
           this.loadText = '加载中...';
           this.loadFlag = true;
@@ -55,40 +64,87 @@
           this.$refs.tdConfirm.hide();
         } else if (type === 'TXL') {
           this.$refs.txlConfirm.hide();
+        } else if (type === 'PYYS4') {
+          this.$refs.yysConfirm.hide();
         } else if (type === 'LOADING') {
           this.loadFlag = false;
         }
       },
+      // 位置认证
       handleDw() {
         this.loadFlag = true;
         this.loadText = '定位中...';
         getLocation().then((data) => {
+          this.loadText = '认证中...';
           let searchCode = getSearchCode();
           let {lng: longitude, lat: latitude} = data.position;
           let {province, city, area, address} = data.addressComponent;
           setUserPosition(province, city, area, address, longitude, latitude, searchCode).then(() => {
-            this.$emit('checkSuc', {
-              name: 'PDW2',
-              complete: true
-            });
             this.loadFlag = false;
+            this.$emit('checkSuc', { name: 'PDW2', complete: true });
           }).catch(() => {
-            this.dwError();
+            this.showConfirm('dwConfirm');
           });
         }).catch(() => {
-          this.dwError();
+          this.showConfirm('dwConfirm');
         });
       },
-      dwError() {
-        this.loadFlag = false;
-        this.showToast('定位失败，请重新进行定位');
-        setTimeout(() => {
-          this.$refs.dwConfirm.show();
-        }, 500);
-        this.loadFlag = false;
+      // 运营商认证
+      handleYys() {
+        let cb = encodeURIComponent(location.origin + '/check-yys');
+        location.href = 'https://open.shujumohe.com/box/yys?box_token=' + BOX_TOKEN + '&cb=' + cb;
       },
-      handleQz() {},
-      handleTd() {},
+      // 欺诈认证
+      handleQz() {
+        this.loadFlag = true;
+        this.loadText = '认证中...';
+        checkQZ(getSearchCode()).then((data) => {
+          this.loadFlag = false;
+          if (data.authorized) {
+            this.$emit('checkSuc', { name: 'PZM7', complete: true, data: { authorized: true } });
+          } else {
+            this.checkError(data);
+          }
+        }).catch(() => {
+          this.showConfirm('qzConfirm');
+        });
+      },
+      // 同盾认证
+      handleTd() {
+        this.loadFlag = true;
+        this.loadText = '认证中...';
+        checkTD(getSearchCode()).then((data) => {
+          this.loadFlag = false;
+          if (data.isSuccess) {
+            this.$emit('checkSuc', { name: 'PTD8', complete: true });
+          } else {
+            this.showConfirm('tdConfirm');
+          }
+        }).catch(() => {
+          this.showConfirm('tdConfirm');
+        });
+      },
+      showConfirm(name) {
+        this.loadFlag = false;
+        setTimeout(() => {
+          this.$refs[name].show();
+        }, 500);
+      },
+      checkError(data) {
+        this.showToast('认证失败，请重新进行认证');
+        if (data.url) {
+          setTimeout(() => {
+            location.href = data.url;
+          }, 500);
+        } else {
+          this.goRedirect();
+        }
+      },
+      goRedirect() {
+        setTimeout(() => {
+          this.$router.push('/redirect');
+        }, 500);
+      },
       showToast(msg) {
         this.toastText = msg;
         this.$refs.toast.show();

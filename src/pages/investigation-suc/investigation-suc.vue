@@ -2,7 +2,7 @@
   <div class="full-screen-wrapper investigation-wrapper">
     <img src="./suc.png"/>
     <div class="tips">恭喜您，已完成测评</div>
-    <div class="btn-wrapper"><button @click="goReport">确认完成</button></div>
+    <!--<div class="btn-wrapper"><button @click="goReport">确认完成</button></div>-->
   </div>
 </template>
 <script>

@@ -21,7 +21,7 @@ export function getPageInvestigation(start, limit) {
  * @param {string} reportCode
  */
 export function getReport(reportCode) {
-  return fetch(805331, {reportCode});
+  return fetch(805332, { reportCode });
 }
 
 /**
@@ -51,16 +51,6 @@ export function setUserInfo(data) {
     ...data,
     searchCode: getSearchCode()
   }, true);
-}
-/**
- * 行业关注清单认证
- * @param {string} searchCode
- */
-export function checkHygzqd(searchCode) {
-  return fetch(805259, {
-    searchCode,
-    isH5: '1'
-  });
 }
 /**
  * 身份证正反面认证
@@ -99,6 +89,27 @@ export function setUserPosition(province, city, area, address, longitude, latitu
   });
 }
 /**
+ * 运营商认证
+ * @param {string} searchCode
+ * @param {string} taskId
+ */
+export function checkYYS(searchCode, taskId) {
+  return fetch(805256, {
+    taskId,
+    searchCode
+  });
+}
+/**
+ * 行业关注清单认证
+ * @param {string} searchCode
+ */
+export function checkHygzqd(searchCode) {
+  return fetch(805259, {
+    searchCode,
+    isH5: '1'
+  });
+}
+/**
  * 芝麻信用分认证
  * @param {string} searchCode
  */
@@ -106,5 +117,22 @@ export function checkZMF(searchCode) {
   return fetch(805258, {
     searchCode,
     isH5: 1
-  })
+  });
+}
+/**
+ * 欺诈三接口认证
+ * @param {string} searchCode
+ */
+export function checkQZ(searchCode) {
+  return fetch(805260, {
+    searchCode,
+    isH5: 1
+  });
+}
+/**
+ * 同盾认证
+ * @param {string} searchCode
+ */
+export function checkTD(searchCode) {
+  return fetch(805261, { searchCode });
 }

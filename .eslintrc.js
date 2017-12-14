@@ -29,10 +29,8 @@ module.exports = {
     'keyword-spacing': 0
   },
   'globals': {
-    'wx': true,
-    'WeixinJSBridge': true,
     'AMap': true,
     'PIC_PREFIX': true,
-    'webim': true
+    'BOX_TOKEN': true
   }
 }

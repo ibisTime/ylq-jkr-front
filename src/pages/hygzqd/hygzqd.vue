@@ -14,15 +14,16 @@
       </div>
     </div>
     <full-loading v-show="loadFlag" title="提交中..."></full-loading>
-    <comm-confirm ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
+    <comm-confirm :noResult="noSearchResult" ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
   </div>
 </template>
 <script>
   import FullLoading from 'base/full-loading/full-loading';
   import CommConfirm from 'components/comm-confirm/comm-confirm';
-  import {setTitle, setCurRouter, getInterfaceInfo, getSearchCode} from 'common/js/util';
+  import {setTitle, setCurRouter, getSearchCode, getRealNameInfo} from 'common/js/util';
   import {interfaceMixin} from 'common/js/mixin';
   import {checkHygzqd} from 'api/biz';
+
   export default {
     mixins: [interfaceMixin],
     data() {
@@ -39,14 +40,10 @@
     },
     methods: {
       init() {
-        let _interface = getInterfaceInfo().filter(v => v.name === 'F2');
-        _interface = _interface.length && _interface[0] || {};
-        if (_interface.data) {
-          if (typeof _interface.data === 'string') {
-            _interface.data = JSON.parse(_interface.data);
-          }
-          this.realName = _interface.data.realName;
-          this.idNo = _interface.data.idNo;
+        let info = getRealNameInfo();
+        if (info) {
+          this.realName = info.realName;
+          this.idNo = info.idNo;
         } else {
           this.$router.replace('/redirect');
         }
@@ -54,10 +51,9 @@
       submit() {
         checkHygzqd(getSearchCode()).then((data) => {
           if (data.authorized) {
-            this.updateInterface('PZM6', true, {authorized: true});
-            this.goNextPage();
+            this.checkSuc({ name: 'PZM6', complete: true, data: { authorized: true } });
           } else {
-            this.$refs.commConfirm.showToast('非常抱歉，认证失败');
+            this.$refs.commConfirm.showToast('认证失败，请重新进行认证');
             if (data.url) {
               setTimeout(() => {
                 location.href = data.url;
