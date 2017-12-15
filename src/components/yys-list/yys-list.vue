@@ -79,9 +79,6 @@
           <p v-for="phone in jjlxrList">{{phone}}</p>
         </div>
       </div>
-      <div class="list-item border-bottom-1px tip">
-        <p>其它认证信息请登录web端查看</p>
-      </div>
     </div>
   </div>
 </template>
