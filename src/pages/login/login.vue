@@ -18,6 +18,9 @@
       <div class="form-btn">
         <button @click="login">登录</button>
       </div>
+      <div class="other-info">
+        <router-link to="/find-pwd">找回密码</router-link>
+      </div>
     </div>
     <full-loading v-show="loadFlag" :title="loadText"></full-loading>
   </div>
@@ -74,10 +77,6 @@
       a {
         font-size: $font-size-medium-s;
         color: #fbab46;
-        float: left;
-        &+a {
-          float: right;
-        }
       }
     }
   }

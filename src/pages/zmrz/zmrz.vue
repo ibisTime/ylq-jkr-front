@@ -16,20 +16,22 @@
         </div>
       </div>
       <div class="form-btn">
-        <button @click="login">提交</button>
+        <button @click="checkZMRZ">提交</button>
       </div>
     </div>
     <full-loading v-show="loadFlag" title="提交中..."></full-loading>
+    <comm-confirm :noResult="noSearchResult" ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
   </div>
 </template>
 <script>
   import FullLoading from 'base/full-loading/full-loading';
+  import CommConfirm from 'components/comm-confirm/comm-confirm';
   import {setTitle, setCurRouter, setRealInfo} from 'common/js/util';
-  import {directiveMixin} from 'common/js/mixin';
+  import {directiveMixin, interfaceMixin} from 'common/js/mixin';
   import {getZhiMaUrl} from 'api/biz';
 
   export default {
-    mixins: [directiveMixin],
+    mixins: [directiveMixin, interfaceMixin],
     data() {
       return {
         loadFlag: false,
@@ -42,19 +44,30 @@
       setTitle('芝麻认证');
     },
     methods: {
-      login() {
+      checkZMRZ() {
         this.$validator.validateAll().then((result) => {
           if (result) {
-            setRealInfo(this.idCard, this.realname);
-            getZhiMaUrl(this.idCard, this.realname).then((url) => {
-              location.href = url;
+            this.loadFlag = true;
+            getZhiMaUrl(this.idCard, this.realname).then((data) => {
+              this.loadFlag = false;
+              if (data.authorized) {
+                this.checkSuc({ name: 'F2', complete: true, data: { idNo: this.idCard, realName: this.realname } });
+              } else if (data.url) {
+                setRealInfo(this.idCard, this.realname);
+                location.href = data.url;
+              } else {
+                this.$refs.commConfirm.showToast('非常抱歉，信息提交失败');
+              }
+            }).catch(() => {
+              this.loadFlag = false;
             });
           }
         });
       }
     },
     components: {
-      FullLoading
+      FullLoading,
+      CommConfirm
     }
   };
 </script>

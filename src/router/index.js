@@ -6,6 +6,8 @@ Vue.use(Router);
 const Redirect = () => import('pages/redirect/redirect');
 // 登录
 const Login = () => import('pages/login/login');
+// 找回密码
+const FindPwd = () => import('pages/find-pwd/find-pwd');
 // 填写完成
 const InvestigationSuc = () => import('pages/investigation-suc/investigation-suc');
 // 芝麻认证
@@ -39,6 +41,10 @@ export default new Router({
     {
       path: '/login',
       component: Login
+    },
+    {
+      path: '/find-pwd',
+      component: FindPwd
     },
     {
       path: '/investigation-suc',

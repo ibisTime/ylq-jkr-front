@@ -8,7 +8,7 @@
   import {isLogin} from 'common/js/util';
   export default {
     created() {
-      if (!isLogin()) {
+      if (!isLogin() && location.pathname !== '/find-pwd' && location.pathname !== '/login') {
         this.$router.replace('/login');
       }
     }
