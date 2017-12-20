@@ -4,7 +4,7 @@
     <confirm ref="yysConfirm" text="点击确定进行运营商认证" :isAlert="isAlert" @confirm="handleYys"></confirm>
     <confirm ref="qzConfirm" text="点击确定进行欺诈认证" :isAlert="isAlert" @confirm="handleQz"></confirm>
     <confirm ref="tdConfirm" text="点击确定进行同盾认证" :isAlert="isAlert" @confirm="handleTd"></confirm>
-    <confirm ref="txlConfirm" text="您还剩通讯录未认证，点击确定前往app进行认证" @confirm="goApp"></confirm>
+    <confirm ref="txlConfirm" text="您还剩通讯录未认证，点击确定前往app进行认证" @cancel="txlCancel" @confirm="goApp"></confirm>
     <full-loading v-show="loadFlag" :title="loadText"></full-loading>
     <toast ref="toast" :text="toastText" :delay="delay"></toast>
     <no-result class="no-result-wrapper" v-show="noResult" title="暂无未完成的调查单"></no-result>
@@ -16,7 +16,7 @@
   import Toast from 'base/toast/toast';
   import NoResult from 'base/no-result/no-result';
   import {getLocation} from 'common/js/location';
-  import {getSearchCode, setCurRouter} from 'common/js/util';
+  import {getSearchCode, setCurRouter, getInterfaceInfo} from 'common/js/util';
   import {setUserPosition, checkQZ, checkTD} from 'api/biz';
 
   export default {
@@ -91,8 +91,22 @@
       },
       // 运营商认证
       handleYys() {
+        let info = getInterfaceInfo();
+        let realName;
+        let userMobile;
+        let identityCode;
+        info.forEach((item) => {
+          if (item.name === 'F1') {
+            userMobile = encodeURIComponent(JSON.parse(item.data).mobile);
+          } else if (item.name === 'F2') {
+            let obj = JSON.parse(item.data);
+            realName = encodeURIComponent(obj.realName);
+            identityCode = encodeURIComponent(obj.idNo);
+          }
+        });
+        let param = `real_name=${realName}&user_mobile=${userMobile}&identity_code=${identityCode}`;
         let cb = encodeURIComponent(location.origin + '/check-yys');
-        location.href = 'https://open.shujumohe.com/box/yys?box_token=' + BOX_TOKEN + '&cb=' + cb;
+        location.href = `https://open.shujumohe.com/box/yys?box_token=${BOX_TOKEN}&cb=${cb}&${param}`;
       },
       // 欺诈认证
       handleQz() {
@@ -151,6 +165,9 @@
       },
       goApp() {
         alert('未实现');
+      },
+      txlCancel() {
+        this.$router.push('/report');
       }
     },
     components: {

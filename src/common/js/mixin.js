@@ -87,7 +87,8 @@ export const interfaceMixin = {
               }
             }
           } else {  // 只剩通讯录认证了，则提示用户去app端认证
-            this.$refs.commConfirm.show('TXL');
+            // this.$refs.commConfirm.show('TXL');
+            this.$router.replace('/investigation-suc');
           }
         } else {  // 调查完成
           this.$router.replace('/investigation-suc');

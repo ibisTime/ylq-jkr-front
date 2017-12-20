@@ -136,3 +136,10 @@ export function checkQZ(searchCode) {
 export function checkTD(searchCode) {
   return fetch(805261, { searchCode });
 }
+/**
+ * 获取报告详情（cfront判断）
+ * @param {string} reportCode
+ */
+export function getSimpleReport (reportCode) {
+  return fetch(805334, { reportCode });
+}
