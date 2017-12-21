@@ -99,7 +99,12 @@
           if (item.name === 'F1') {
             userMobile = encodeURIComponent(JSON.parse(item.data).mobile);
           } else if (item.name === 'F2') {
-            let obj = JSON.parse(item.data);
+            let obj;
+            if (typeof item.data === 'string') {
+              obj = JSON.parse(item.data);
+            } else {
+              obj = item.data;
+            }
             realName = encodeURIComponent(obj.realName);
             identityCode = encodeURIComponent(obj.idNo);
           }

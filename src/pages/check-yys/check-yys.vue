@@ -1,6 +1,6 @@
 <template>
   <div class="check-zm-wrapper">
-    <full-loading v-show="loadFlag" title="认证中..."></full-loading>
+    <full-loading v-show="loadFlag" title="运营商认证中，可能需要等待10几秒钟..."></full-loading>
     <comm-confirm :noResult="noSearchResult" ref="commConfirm" @checkSuc="checkSuc"></comm-confirm>
   </div>
 </template>
@@ -37,34 +37,38 @@
           if (data.isSuccess) {
             this.checkRealYys();
           } else {
-            this.loadFlag = false;
-            this.$refs.commConfirm.showToast('认证失败，请重新进行认证');
-            setTimeout(() => {
-              this.$refs.commConfirm.show('PYYS4');
-            }, 500);
+            this.checkFailed();
           }
         }).catch(() => {
-          this.loadFlag = false;
-          setTimeout(() => {
-            this.$refs.commConfirm.show('PYYS4');
-          }, 500);
+          this.checkFailed();
         });
       },
       checkRealYys() {
         getSimpleReport(this.reportCode).then((data) => {
-          if (data['PYYS4'] && data['PYYS4'] === '1') {
+          // 0：未认证，1：结果拉取中，2：认证成功，3：认证失败
+          if (data['PYYS4Status'] === '2') {
             this.loadFlag = false;
             this.checkSuc({ name: 'PYYS4', complete: true });
+          } else if (data['PYYS4Status'] === '3') {
+            this.checkFailed();
           } else {
-            setTimeout(() => {
-              this.checkRealYys();
-            }, 3000);
+            this.loopCheck();
           }
         }).catch(() => {
-          setTimeout(() => {
-            this.checkRealYys();
-          }, 3000);
+          this.loopCheck();
         });
+      },
+      loopCheck() {
+        setTimeout(() => {
+          this.checkRealYys();
+        }, 3000);
+      },
+      checkFailed() {
+        this.loadFlag = false;
+        this.$refs.commConfirm.showToast('认证失败，请重新进行认证');
+        setTimeout(() => {
+          this.$refs.commConfirm.show('PYYS4');
+        }, 500);
       }
     },
     components: {
